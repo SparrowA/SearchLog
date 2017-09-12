@@ -7,6 +7,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Tab;
+import javafx.scene.control.TreeItem;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -38,6 +39,8 @@ public class Main extends Application {
         mOpenFiles = new LinkedList<>();
         mFileChooser = new FileChooser();
         directoryChooser = new DirectoryChooser();
+
+        directoryChooser.setTitle("Choose Folder");
 
 
         mAlert = new Alert(Alert.AlertType.ERROR);
@@ -74,6 +77,24 @@ public class Main extends Application {
     public static void DeleteOpenFileByTab(Tab tab){
         mOpenFiles.removeIf(x -> x.getParentTab() == tab);
     }
+
+
+    public static TreeItem<String> FillChild(File root){
+        TreeItem<String> temp = new TreeItem<>(root.getName());
+
+        for (String file: root.list()) {
+            File dir = new File(file);
+
+            if(dir.isDirectory()){
+                TreeItem<String> current = new TreeItem<>(dir.getName());
+                current.getChildren().add(FillChild(dir));
+                temp.getChildren().add(current);
+            }
+        }
+
+        return temp;
+    }
+
 
     public static void main(String[] args) {
         launch(args);

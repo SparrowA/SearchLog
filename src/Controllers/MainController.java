@@ -32,26 +32,11 @@ public class MainController {
     public void onStartNewSearch(){
         File file = null;
 
-        try {
-            file = Main.chooseDirectory();
+        file = Main.chooseDirectory();
 
-            if (file != null) {
-                TreeItem<String> root = new TreeItem<>(file.getName());
-                String[] listFile = file.list(new FilenameFilter() {
-                    @Override
-                    public boolean accept(File dir, String name) {
-                        return name.contains(".log");
-                    }
-                });
-
-                for (String name : listFile) {
-
-                }
-            }
-            if (file != null)
-              tabPane.getTabs().add(Main.AddNewFile(file).getParentTab());
-        } catch (FileNotFoundException e) {
-            Main.ShowError("File not found!", "File called " + file.getName() + " not found!");
+        if (file != null) {
+            TreeItem<String> root = Main.FillChild(file);
+            fileTree.setRoot(root);
         }
     }
 }
