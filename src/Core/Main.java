@@ -19,6 +19,7 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.RandomAccessFile;
 import java.util.*;
 import java.util.stream.Stream;
 
@@ -88,6 +89,7 @@ public class Main extends Application {
     }
 
     private static boolean IsContainsText(File source, String searchText) throws FileNotFoundException {
+       // RandomAccessFile randomAccess = new RandomAccessFile(source, "r");
         Scanner scanner = new Scanner(source);
 
         boolean result = false;
