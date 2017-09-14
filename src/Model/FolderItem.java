@@ -9,24 +9,27 @@ public class FolderItem {
 
     private File mSourceFolder;
 
-    private TreeItem<String> mItem;
-
     public FolderItem(File source) throws FileNotFoundException {
         if(source == null || !source.exists()){
           throw new FileNotFoundException("Directory not found");
         }
 
         mSourceFolder = source;
-
-        CreateTreeItem();
     }
 
-    private void CreateTreeItem(){
-        mItem = new TreeItem<>();
-        mItem.setValue(mSourceFolder.getName());
+    public String toString(){
+        return mSourceFolder.getName();
     }
 
-    public TreeItem<String> getTreeItem(){
-        return mItem;
+    public String getPathFile(){
+        return mSourceFolder.getAbsolutePath();
+    }
+
+    public File getSourceFile(){
+        return mSourceFolder;
+    }
+
+    public boolean isFile(){
+        return mSourceFolder.isFile();
     }
 }

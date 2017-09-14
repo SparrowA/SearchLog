@@ -34,6 +34,8 @@ public class OpenFile {
     private void CreateParentTab() throws FileNotFoundException {
         parentTab = new Tab(sourceFile.getName());
 
+        parentTab.setUserData(this);
+
         HBox hBox = new HBox();
         textArea = new TextArea();
         hBox.getChildren().add(textArea);
@@ -56,6 +58,10 @@ public class OpenFile {
         }
 
         textArea.setText(builder.toString());
+    }
+
+    public String getFilePath(){
+        return sourceFile.getAbsolutePath();
     }
 
     public Tab getParentTab(){

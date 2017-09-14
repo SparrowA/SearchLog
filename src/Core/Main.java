@@ -1,22 +1,26 @@
 package Core;
 
+import Model.FolderItem;
 import Model.OpenFile;
 import javafx.application.Application;
+import javafx.event.Event;
+import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TreeItem;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Stream;
 
 public class Main extends Application {
 
@@ -62,39 +66,41 @@ public class Main extends Application {
         return directoryChooser.showDialog(primaryStage);
     }
 
-    public static File chooseFile(){
-        return mFileChooser.showOpenDialog(primaryStage);
-    }
-
-    public static OpenFile AddNewFile(File file) throws FileNotFoundException {
-        OpenFile openFile = new OpenFile(file);
-
-        mOpenFiles.add(openFile);
-
-        return openFile;
-    }
-
     public static void DeleteOpenFileByTab(Tab tab){
         mOpenFiles.removeIf(x -> x.getParentTab() == tab);
     }
 
+    public static TreeItem<FolderItem> FillChild(File root, String lookingText) throws FileNotFoundException {
+        TreeItem<FolderItem> temp = new TreeItem<>(new FolderItem(root));
 
-    public static TreeItem<String> FillChild(File root){
-        TreeItem<String> temp = new TreeItem<>(root.getName());
-
-        for (String file: root.list()) {
-            File dir = new File(file);
-
-            if(dir.isDirectory()){
-                TreeItem<String> current = new TreeItem<>(dir.getName());
-                current.getChildren().add(FillChild(dir));
-                temp.getChildren().add(current);
+        for (File file: root.listFiles()) {
+            if (file.isDirectory()) {
+                TreeItem<FolderItem> node = FillChild(file, lookingText);
+                if(node != null)
+                    temp.getChildren().add(node);
+            }
+            else if (file.getName().contains(".log") && IsContainsText(file, lookingText)) {
+                temp.getChildren().add(new TreeItem<>(new FolderItem(file)));
             }
         }
 
-        return temp;
+        return temp.getChildren().size() == 0 ? null : temp;
     }
 
+    private static boolean IsContainsText(File source, String searchText) throws FileNotFoundException {
+        Scanner scanner = new Scanner(source);
+
+        boolean result = false;
+
+        while (scanner.hasNextLine()){
+            if(scanner.nextLine().contains(searchText)){
+                result = true;
+                break;
+            }
+        }
+
+        return result;
+    }
 
     public static void main(String[] args) {
         launch(args);
