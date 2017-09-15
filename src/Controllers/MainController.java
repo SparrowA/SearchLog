@@ -3,6 +3,8 @@ package Controllers;
 import Core.Main;
 import Model.FolderItem;
 import Model.OpenFile;
+import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
@@ -31,37 +33,38 @@ public class MainController {
     }
 
     public void onStartNewSearch() {
-        File file = Main.chooseDirectory();
+        File root = Main.chooseDirectory();
 
-        if (file != null) {
-            try {
-                TreeItem<FolderItem> root = Main.FillChild(file, "looking");
-                fileTree.setRoot(root);
+        (new Thread(() -> FillChild(root))).start();
+    }
 
-                fileTree.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-                    if (((FolderItem) ((TreeItem) newValue).getValue()).isFile()){
-                        String filePath = ((FolderItem) ((TreeItem) newValue).getValue()).getPathFile();
+    private void FillChild(File rootDirectory){
+        if (rootDirectory != null) {
+            TreeItem<FolderItem> root = Main.FillChild(rootDirectory, "looking");
 
-                        if (!tabPane.getTabs().stream().anyMatch(y -> ((OpenFile) ((y).getUserData())).getFilePath().equals(filePath))) {
-                            try {
-                                OpenFile openFile = new OpenFile(((FolderItem) ((TreeItem) newValue).getValue()).getSourceFile());
-                                tabPane.getTabs().addAll(openFile.getParentTab());
-                            } catch (FileNotFoundException e) {
-                                e.printStackTrace();
-                            }
-                        } else {
-                            tabPane.getSelectionModel().select(
-                                    tabPane.getTabs().stream()
-                                            .filter(x -> ((OpenFile) x.getUserData()).getFilePath().equals(filePath))
-                                            .findAny()
-                                            .get()
-                            );
+            Platform.runLater(() -> fileTree.setRoot(root));
+
+            fileTree.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+                if (((FolderItem) ((TreeItem) newValue).getValue()).isFile()) {
+                    String filePath = ((FolderItem) ((TreeItem) newValue).getValue()).getPathFile();
+
+                    if (!tabPane.getTabs().stream().anyMatch(y -> ((OpenFile) ((y).getUserData())).getFilePath().equals(filePath))) {
+                        try {
+                            OpenFile openFile = new OpenFile(((FolderItem) ((TreeItem) newValue).getValue()).getSourceFile());
+                            Platform.runLater(() -> tabPane.getTabs().addAll(openFile.getParentTab()));
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
                         }
+                    } else {
+                        Platform.runLater(() -> tabPane.getSelectionModel().select(
+                                                    tabPane.getTabs().stream()
+                                                            .filter(x -> ((OpenFile) x.getUserData()).getFilePath().equals(filePath))
+                                                            .findAny()
+                                                            .get()
+                        ));
                     }
-                });
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
+                }
+            });
         }
     }
 }

@@ -71,17 +71,26 @@ public class Main extends Application {
         mOpenFiles.removeIf(x -> x.getParentTab() == tab);
     }
 
-    public static TreeItem<FolderItem> FillChild(File root, String lookingText) throws FileNotFoundException {
-        TreeItem<FolderItem> temp = new TreeItem<>(new FolderItem(root));
+    public static TreeItem<FolderItem> FillChild(File root, String lookingText) {
+        TreeItem<FolderItem> temp = null;
 
-        for (File file: root.listFiles()) {
-            if (file.isDirectory()) {
-                TreeItem<FolderItem> node = FillChild(file, lookingText);
-                if(node != null)
-                    temp.getChildren().add(node);
-            }
-            else if (file.getName().contains(".log") && IsContainsText(file, lookingText)) {
-                temp.getChildren().add(new TreeItem<>(new FolderItem(file)));
+        if(root != null) {
+            try {
+                temp = new TreeItem<>(new FolderItem(root));
+
+                for (File file : root.listFiles()) {
+                    if (file.isDirectory()) {
+                        TreeItem<FolderItem> node = FillChild(file, lookingText);
+                        if (node != null)
+                            temp.getChildren().add(node);
+                    } else if (file.getName().contains(".log") && IsContainsText(file, lookingText)) {
+                        temp.getChildren().add(new TreeItem<>(new FolderItem(file)));
+                    }
+                }
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (NullPointerException e) {
+                e.printStackTrace();
             }
         }
 
