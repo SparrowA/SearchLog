@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.GridPane?>
+
+
+<GridPane alignment="center" hgap="10" vgap="10" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="Controllers.SearchSettingController">
+   <columnConstraints>
+      <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
+      <ColumnConstraints hgrow="ALWAYS" />
+   </columnConstraints>
+   <rowConstraints>
+      <RowConstraints vgrow="ALWAYS" />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" />
+   </rowConstraints>
+   <children>
+      <TableView prefHeight="196.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.vgrow="ALWAYS" fx:id="tableExtension">
+        <columns>
+          <TableColumn maxWidth="1.7976931348623157E308" minWidth="-1.0" prefWidth="-1.0" text="Extension" />
+        </columns>
+      </TableView>
+      <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+         <children>
+            <Button mnemonicParsing="false" text="Add Extension" AnchorPane.rightAnchor="5.0" onAction="#AddExtension" />
+         </children>
+      </AnchorPane>
+      <VBox prefHeight="200.0" prefWidth="100.0">
+         <children>
+            <Label contentDisplay="CENTER" prefHeight="17.0" prefWidth="102.0" text="Search Text">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+               <VBox.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </VBox.margin>
+            </Label>
+            <TextArea prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+               <VBox.margin>
+                  <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+               </VBox.margin>
+            </TextArea>
+         </children>
+      </VBox>
+   </children>
+</GridPane>

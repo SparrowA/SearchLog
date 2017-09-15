@@ -6,10 +6,15 @@ import Model.OpenFile;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 
 /**
  * Created by a.gusev on 12.09.2017.
@@ -66,5 +71,15 @@ public class MainController {
                 }
             });
         }
+    }
+
+    public void onMenuSettingExtension() throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource("/View/ExtensionForm.fxml"));
+
+        Stage stage = new Stage();
+
+        stage.setTitle("Settings Search");
+        stage.setScene(new Scene(root));
+        stage.show();
     }
 }
