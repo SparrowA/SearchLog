@@ -12,9 +12,12 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 
+import javax.naming.directory.SearchControls;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URL;
+import java.nio.charset.Charset;
 
 /**
  * Created by a.gusev on 12.09.2017.
@@ -77,9 +80,11 @@ public class MainController {
         Parent root = FXMLLoader.load(getClass().getResource("/View/ExtensionForm.fxml"));
 
         Stage stage = new Stage();
-
         stage.setTitle("Settings Search");
         stage.setScene(new Scene(root));
+        stage.setMinWidth(350);
+        stage.setMinHeight(300);
+
         stage.show();
     }
 }

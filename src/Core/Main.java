@@ -3,7 +3,10 @@ package Core;
 import Model.FolderItem;
 import Model.OpenFile;
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -25,6 +28,10 @@ public class Main extends Application {
 
     private static DirectoryChooser directoryChooser;
 
+    private static ObservableList<String> mExtensionFile = FXCollections.observableArrayList();
+
+    private static Alert mAllert;
+
     @Override
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getResource("/View/MainForm.fxml"));
@@ -32,13 +39,28 @@ public class Main extends Application {
         this.primaryStage = primaryStage;
 
         mOpenFiles = new LinkedList<>();
-        directoryChooser = new DirectoryChooser();
 
+        directoryChooser = new DirectoryChooser();
         directoryChooser.setTitle("Choose Folder");
+
+        mAllert = new Alert(Alert.AlertType.WARNING);
+
+        InitExtensionList();
 
         primaryStage.setTitle("Search Logs");
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
+    }
+
+    public static void ShowAllert(String title, String message){
+        mAllert.setTitle(title);
+        mAllert.setContentText(message);
+
+        mAllert.show();
+    }
+
+    private static void InitExtensionList(){
+        mExtensionFile.add(".log");
     }
 
     public static File chooseDirectory(){
@@ -90,6 +112,13 @@ public class Main extends Application {
         return result;
     }
 
+    public static ObservableList<String> getExtensionFile(){
+        if(mExtensionFile.size() == 0){
+            InitExtensionList();
+        }
+
+        return mExtensionFile;
+    }
 
     public static void main(String[] args) {
         launch(args);
