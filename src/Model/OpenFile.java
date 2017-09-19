@@ -3,6 +3,7 @@ package Model;
 import javafx.geometry.Insets;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -33,6 +34,8 @@ public class OpenFile {
 
     private void CreateParentTab() throws FileNotFoundException {
         parentTab = new Tab(sourceFile.getName());
+
+        parentTab.setTooltip(new Tooltip(sourceFile.getAbsolutePath()));
 
         parentTab.setUserData(this);
 

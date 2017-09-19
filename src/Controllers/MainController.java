@@ -26,6 +26,12 @@ public class MainController {
     @FXML
     TabPane tabPane;
 
+    @FXML
+    TextField fastSearchText;
+
+    @FXML
+    TextField fastExtensionText;
+
     public void OnMenuAddTab() {
         Tab tab = new Tab("New tab " + (tabPane.getTabs().size() + 1));
         tabPane.getTabs().add(tab);
@@ -37,14 +43,18 @@ public class MainController {
     }
 
     public void onStartNewSearch() {
-        File root = Main.chooseDirectory();
+        Main.chooseDirectory();
 
+        ReBuildTree();
+    }
+
+    public void ReBuildTree(){
         if(fileTree.getRoot() != null){
             fileTree.getRoot().getChildren().clear();
         }
         fileTree.setRoot(null);
 
-        (new Thread(() -> FillChild(root))).start();
+        (new Thread(() -> FillChild(Main.getSelectedDirectory()))).start();
     }
 
     private void FillChild(File rootDirectory){
@@ -85,6 +95,11 @@ public class MainController {
         stage.setScene(new Scene(root));
         stage.setMinWidth(350);
         stage.setMinHeight(300);
+
+        stage.setOnHidden(e -> {
+            Platform.runLater(() -> fastSearchText.setText(Main.mLookingText));
+            Platform.runLater(() -> fastExtensionText.setText(Main.getExtensionText()));
+        });
 
         stage.show();
     }

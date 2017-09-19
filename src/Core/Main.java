@@ -33,6 +33,7 @@ public class Main extends Application {
 
     private static Alert mAlert;
 
+    private static File mSelectedDirectory;
 
     @Override
     public void start(Stage primaryStage) throws Exception{
@@ -65,8 +66,16 @@ public class Main extends Application {
         mExtensionFile.add(new FileExtension(".log"));
     }
 
-    public static File chooseDirectory(){
-        return directoryChooser.showDialog(primaryStage);
+    public static void chooseDirectory(){
+        mSelectedDirectory = directoryChooser.showDialog(primaryStage);
+    }
+
+    public static File getSelectedDirectory(){
+        if(mSelectedDirectory == null){
+            chooseDirectory();
+        }
+
+        return mSelectedDirectory;
     }
 
     public static void DeleteOpenFileByTab(Tab tab){
@@ -129,6 +138,17 @@ public class Main extends Application {
         }
 
         return mExtensionFile;
+    }
+
+    public static String getExtensionText(){
+        StringBuilder extension = new StringBuilder();
+
+        mExtensionFile.stream().forEach(x -> {
+            extension.append(x.getmExtension());
+            extension.append(";");
+        });
+
+        return extension.toString();
     }
 
     public static void main(String[] args) {

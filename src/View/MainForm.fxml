@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.image.*?>
 <?import java.lang.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
@@ -37,6 +38,43 @@
           </Menu>
         </menus>
       </MenuBar>
+      <GridPane>
+        <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="144.0" minWidth="42.0" prefWidth="42.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="144.0" minWidth="93.0" prefWidth="93.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="247.0" minWidth="206.0" prefWidth="206.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="127.0" minWidth="86.0" prefWidth="86.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="210.0" minWidth="120.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Label alignment="CENTER" text="Текст поиска" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.vgrow="ALWAYS">
+               <GridPane.margin>
+                  <Insets />
+               </GridPane.margin>
+            </Label>
+            <TextField fx:id="fastSearchText" disable="true" GridPane.columnIndex="2" />
+            <Label text="Расширения" GridPane.columnIndex="3" GridPane.halignment="CENTER">
+               <GridPane.margin>
+                  <Insets />
+               </GridPane.margin>
+            </Label>
+            <TextField fx:id="fastExtensionText" disable="true" GridPane.columnIndex="4">
+               <GridPane.margin>
+                  <Insets right="5.0" />
+               </GridPane.margin></TextField>
+            <ImageView fitHeight="20.0" fitWidth="20.0" onMouseClicked="#ReBuildTree" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER">
+               <GridPane.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </GridPane.margin>
+               <image>
+                  <Image url="@../../../../../Downloads/UpdateImage.png" />
+               </image>
+            </ImageView>
+         </children>
+      </GridPane>
       <AnchorPane prefWidth="600.0" VBox.vgrow="ALWAYS">
          <VBox.margin>
             <Insets />
