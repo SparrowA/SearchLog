@@ -5,6 +5,7 @@ import Model.FileExtension;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.TextFieldListCell;
 import javafx.scene.input.KeyCode;
@@ -91,6 +92,9 @@ public class SearchSettingController implements Initializable {
     @FXML
     private ListView<FileExtension> listExtension;
 
+    @FXML
+    private TextArea searchText;
+
     public void AddExtension(){
         listExtension.getItems().add(new FileExtension(".NewExtension"));
     }
@@ -98,6 +102,13 @@ public class SearchSettingController implements Initializable {
     public void SaveExtensionSetting(){
         if(listExtension.getItems().size() == 0){
             Main.ShowAlert("Внимание!", "Не задано ни одно расширение для поиска!");
+        }
+
+        if(searchText.getText().isEmpty()){
+            Main.ShowAlert("Внимание!", "Не задан текст для поиска в файлах. Будут отображены все файлы с указанным расширением.");
+        }
+        else{
+            Main.mLookingText = searchText.getText();
         }
 
         ((Stage)listExtension.getScene().getWindow()).close();

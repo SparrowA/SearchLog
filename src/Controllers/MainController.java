@@ -4,7 +4,6 @@ import Core.Main;
 import Model.FolderItem;
 import Model.OpenFile;
 import javafx.application.Platform;
-import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -12,12 +11,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 
-import javax.naming.directory.SearchControls;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.URL;
-import java.nio.charset.Charset;
 
 /**
  * Created by a.gusev on 12.09.2017.
@@ -43,12 +39,17 @@ public class MainController {
     public void onStartNewSearch() {
         File root = Main.chooseDirectory();
 
+        if(fileTree.getRoot() != null){
+            fileTree.getRoot().getChildren().clear();
+        }
+        fileTree.setRoot(null);
+
         (new Thread(() -> FillChild(root))).start();
     }
 
     private void FillChild(File rootDirectory){
         if (rootDirectory != null) {
-            TreeItem<FolderItem> root = Main.FillChild(rootDirectory, "looking");
+            TreeItem<FolderItem> root = Main.FillChild(rootDirectory, Main.mLookingText);
 
             Platform.runLater(() -> fileTree.setRoot(root));
 

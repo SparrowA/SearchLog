@@ -31,7 +31,7 @@
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </VBox.margin>
             </HBox>
-            <TextArea prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+            <TextArea fx:id="searchText" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
                <VBox.margin>
                   <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                </VBox.margin>

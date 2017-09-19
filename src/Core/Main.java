@@ -23,6 +23,8 @@ public class Main extends Application {
 
     public static Stage primaryStage;
 
+    public static String mLookingText;
+
     private static List<OpenFile> mOpenFiles;
 
     private static DirectoryChooser directoryChooser;
@@ -30,6 +32,7 @@ public class Main extends Application {
     private static ObservableList<FileExtension> mExtensionFile = FXCollections.observableArrayList();
 
     private static Alert mAlert;
+
 
     @Override
     public void start(Stage primaryStage) throws Exception{
@@ -101,15 +104,20 @@ public class Main extends Application {
     }
 
     private static boolean IsContainsText(File source, String searchText) throws FileNotFoundException {
-        Scanner scanner = new Scanner(source);
-
         boolean result = false;
 
-        while (scanner.hasNextLine()){
-            if(scanner.nextLine().contains(searchText)){
-                result = true;
-                break;
+        if(searchText != null && !searchText.isEmpty()) {
+            Scanner scanner = new Scanner(source);
+
+            while (scanner.hasNextLine()) {
+                if (scanner.nextLine().contains(searchText)) {
+                    result = true;
+                    break;
+                }
             }
+        }
+        else {
+            result = true;
         }
 
         return result;
