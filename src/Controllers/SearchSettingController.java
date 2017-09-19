@@ -1,7 +1,7 @@
 package Controllers;
 
 import Core.Main;
-import javafx.collections.ObservableList;
+import Model.FileExtension;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ListView;
@@ -17,7 +17,7 @@ import java.util.ResourceBundle;
  * Created by a.gusev on 15.09.2017.
  */
 
-class EditListCell extends TextFieldListCell<String>{
+class EditListCell extends TextFieldListCell<FileExtension>{
 
     private TextField mTextField;
 
@@ -26,17 +26,15 @@ class EditListCell extends TextFieldListCell<String>{
 
         mTextField = new TextField();
 
-        mTextField.setText(getItem());
-
         mTextField.setOnKeyPressed(event -> {
             if(event.getCode().equals(KeyCode.ENTER)){
-                commitEdit(mTextField.getText());
+                commitEdit(FileExtension.GetInstanceExtension(mTextField.getText()));
             }
         });
 
         mTextField.focusedProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue){
-                commitEdit(mTextField.getText());
+                commitEdit(FileExtension.GetInstanceExtension(mTextField.getText()));
             }
         });
 
@@ -47,7 +45,7 @@ class EditListCell extends TextFieldListCell<String>{
     public void startEdit() {
         super.startEdit();
 
-        mTextField.setText(getItem());
+        mTextField.setText(getItem().getmExtension());
         setText(null);
         setGraphic(mTextField);
     }
@@ -61,12 +59,7 @@ class EditListCell extends TextFieldListCell<String>{
     }
 
     @Override
-    public void commitEdit(String newValue) {
-        super.commitEdit(newValue);
-    }
-
-    @Override
-    public void updateItem(String item, boolean empty) {
+    public void updateItem(FileExtension item, boolean empty) {
         super.updateItem(item, empty);
 
         if(empty){
@@ -75,14 +68,17 @@ class EditListCell extends TextFieldListCell<String>{
         }
         else
         {
-            if(item == null){
+            if(item == null || item.toString().isEmpty()){
                 mTextField.setText(null);
                 setGraphic(null);
+                if(getListView() != null && getListView().getItems() != null){
+                    getListView().getItems().remove(item);
+                }
             }
             else{
-                mTextField.setText(item);
+                mTextField.setText(item.getmExtension());
                 setGraphic(null);
-                setText(item);
+                setText(item.getmExtension());
             }
         }
     }
@@ -93,26 +89,23 @@ class EditListCell extends TextFieldListCell<String>{
 public class SearchSettingController implements Initializable {
 
     @FXML
-    private ListView<String> listExtension;
+    private ListView<FileExtension> listExtension;
 
     public void AddExtension(){
-        listExtension.getItems().add("New Extension");
+        listExtension.getItems().add(new FileExtension(".NewExtension"));
     }
 
     public void SaveExtensionSetting(){
         if(listExtension.getItems().size() == 0){
-            Main.ShowAllert("Внимание!", "Не задано ни одно расширение для поиска!");
+            Main.ShowAlert("Внимание!", "Не задано ни одно расширение для поиска!");
         }
 
         ((Stage)listExtension.getScene().getWindow()).close();
     }
 
-    public void setExtension(ObservableList<String> extension){
-        listExtension.setItems(extension);
-    }
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         listExtension.setCellFactory(cf -> new EditListCell());
+        listExtension.setItems(Main.getExtensionFile());
     }
 }

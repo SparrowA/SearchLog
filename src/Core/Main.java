@@ -1,19 +1,18 @@
 package Core;
 
+import Model.FileExtension;
 import Model.FolderItem;
 import Model.OpenFile;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TreeItem;
 import javafx.stage.DirectoryChooser;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -28,9 +27,9 @@ public class Main extends Application {
 
     private static DirectoryChooser directoryChooser;
 
-    private static ObservableList<String> mExtensionFile = FXCollections.observableArrayList();
+    private static ObservableList<FileExtension> mExtensionFile = FXCollections.observableArrayList();
 
-    private static Alert mAllert;
+    private static Alert mAlert;
 
     @Override
     public void start(Stage primaryStage) throws Exception{
@@ -43,7 +42,7 @@ public class Main extends Application {
         directoryChooser = new DirectoryChooser();
         directoryChooser.setTitle("Choose Folder");
 
-        mAllert = new Alert(Alert.AlertType.WARNING);
+        mAlert = new Alert(Alert.AlertType.WARNING);
 
         InitExtensionList();
 
@@ -52,15 +51,15 @@ public class Main extends Application {
         primaryStage.show();
     }
 
-    public static void ShowAllert(String title, String message){
-        mAllert.setTitle(title);
-        mAllert.setContentText(message);
+    public static void ShowAlert(String title, String message){
+        mAlert.setTitle(title);
+        mAlert.setContentText(message);
 
-        mAllert.show();
+        mAlert.show();
     }
 
     private static void InitExtensionList(){
-        mExtensionFile.add(".log");
+        mExtensionFile.add(new FileExtension(".log"));
     }
 
     public static File chooseDirectory(){
@@ -83,7 +82,7 @@ public class Main extends Application {
                         TreeItem<FolderItem> node = FillChild(file, lookingText);
                         if (node != null)
                             temp.getChildren().add(node);
-                    } else if (file.getName().contains(".log") && IsContainsText(file, lookingText)) {
+                    } else if (IsExtension(file.getName()) && IsContainsText(file, lookingText)) {
                         temp.getChildren().add(new TreeItem<>(new FolderItem(file)));
                     }
                 }
@@ -95,6 +94,10 @@ public class Main extends Application {
         }
 
         return temp.getChildren().size() == 0 ? null : temp;
+    }
+
+    private static boolean IsExtension(String textExtension){
+        return mExtensionFile.filtered(x -> x.IsContainExtension(textExtension)).size() != 0;
     }
 
     private static boolean IsContainsText(File source, String searchText) throws FileNotFoundException {
@@ -112,7 +115,7 @@ public class Main extends Application {
         return result;
     }
 
-    public static ObservableList<String> getExtensionFile(){
+    public static ObservableList<FileExtension> getExtensionFile(){
         if(mExtensionFile.size() == 0){
             InitExtensionList();
         }
