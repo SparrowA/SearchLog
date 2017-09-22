@@ -46,6 +46,8 @@ public class MainController {
         Main.chooseDirectory();
 
         ReBuildTree();
+
+
     }
 
     public void ReBuildTree(){
